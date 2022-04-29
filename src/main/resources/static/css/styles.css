@@ -1,0 +1,112 @@
+@charset "ISO-8859-1";
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+
+body {
+  margin: 0;
+  font-family: 'PT Sans', sans-serif;
+}
+
+.topnav {
+	height: 8vh;
+	overflow: hidden;
+	background-color: #2266c9;
+}
+
+.topnav a {
+  float: left;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+.topnav a:hover {
+  background-color: #ddd;
+  color: black;
+}
+
+.topnav a.active {
+  background-color: #00bfff;
+  color: white;
+}
+
+.hamburgher {
+  width: 55px;
+  height: 8px;
+  background-color: white;
+  margin: 12px 10px;
+}
+
+.title {
+	position: absolute;
+	top: 35px;
+	border-radius: 35px;
+	padding: 20px;
+	margin-left: 40%;
+	text-align: center;
+	width: 20vw;
+	background-color: #FFD700;
+	color: #2266c9;
+	font-size: 35px;
+}
+
+#cinema, #film, #giorno, #ora {
+	padding: 2vh;
+	margin-left: 5vw;	
+	width: 90vw;
+	color: #2266c9;
+}
+
+#cinema {
+	margin-top: 8vh;
+}
+
+.select_button {
+	gap: 50px;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	border: 1px solid black;
+	width: 49%;
+	border: none;
+	padding: 5vh;
+	font-size: 25px;
+	color: white;
+}
+
+.flex_conteiner {
+	margin-top: 200px;
+	justify-content: center;	
+	gap: 3px;
+	display: flex;
+	width: 100vw;
+	height: 50vh;
+	flex-wrap: wrap; 
+}
+
+.inner_select {
+	gap: 50px;
+	align-items: center;
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	border: 1px solid black;
+	width: 70%;
+	border: none;
+	padding: 5vh;
+	background-color: #2266c9;
+	font-size: 25px;
+	color: white;
+}
+
+img {
+	width: 65%;
+}
+

@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+	<meta charset='UTF-8' />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Moviestars</title>
+	<link th:href="@{/css/styles.css}" rel="stylesheet" />
+
+</head>
+
+<body>
+	<header class='speaker-form-header'>
+		<form action='' method='post' class='speaker-form'>
+
+			<div class="topnav">
+				<div class="hamburgher"></div>
+				<div class="hamburgher"></div>
+				<div class="hamburgher"></div>
+			</div>
+			<h2 class="title">Moviestars</h2>
+
+			<select name="cinema" id="cinema">
+				<option value="">Seleziona un cinema</option>
+				<option value="cinema1">Cinema1</option>
+				<option value="cinema2">Cinema2</option>
+				<option value="cinema3">Cinema3</option>
+			</select>
+			<br><br>
+			<select name="film" id="film">
+				<option value="">Seleziona un film</option>
+				<option value="film1">Film1</option>
+				<option value="film2">Film2</option>
+				<option value="film3">Film3</option>
+			</select>
+			<br><br>
+			<select name="giorno" id="giorno">
+				<option value="">Seleziona un giorno</option>
+				<option value="giorno1">Giorno1</option>
+				<option value="giorno2">Giorno2</option>
+				<option value="giorno3">Giorno3</option>
+			</select>
+<!--			<br><br>-->
+<!--			<select name="ora" id="ora">-->
+<!--				<option value="">Seleziona un orario</option>-->
+<!--				<option value="ora1">Ora1</option>-->
+<!--				<option value="ora2">Ora2</option>-->
+<!--				<option value="ora3">Ora3</option>-->
+<!--			</select>-->
+<!--			<br><br>-->
+
+			<div class="flex_conteiner">
+				<div class="select_button">
+					<div class="inner_select"><img th:src="@{\images\cinema.png}" />
+						<h3>Movie</h3>
+					</div>
+				</div>
+				<div class="select_button">
+					<div class="inner_select"><img th:src="@{\images\clapperboard.png}" />
+						<h3>Sala</h3>
+					</div>
+				</div>
+				<div class="select_button">
+					<div class="inner_select"><img th:src="@{\images\ribbon.png}" />
+						<h3>My Moviestars</h3>
+					</div>
+				</div>
+				<div class="select_button">
+					<div class="inner_select"><img th:src="@{\images\settings.png}" />
+						<h3>Impostazioni</h3>
+					</div>
+				</div>
+
+			</div>
+
+
+		</form>
+	</header>
+</body>
+
+</html>

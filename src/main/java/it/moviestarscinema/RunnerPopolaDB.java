@@ -17,7 +17,7 @@ import it.moviestarscinema.model.SalaDAO;
 import it.moviestarscinema.util.BackupWriter;
 import it.moviestarscinema.util.DataBaseUtil;
 
-@Component
+//@Component
 public class RunnerPopolaDB implements CommandLineRunner {
 
 	@Override
