@@ -7,8 +7,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import it.moviestarscinema.util.ConnectionFactory;
 
+@Component
 public class ProiezioniDAO {
 
 	public boolean insertProiezioni(Proiezioni new_proiezione) {

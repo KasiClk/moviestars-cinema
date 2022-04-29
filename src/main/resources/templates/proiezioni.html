@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+	<meta charset='UTF-8' />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Moviestars</title>
+	<link th:href="@{/css/proiezioni.css}" rel="stylesheet" />
+
+</head>
+
+<body>
+	<header class='speaker-form-header'>
+		<header class='speaker-form-header'>
+			<form action='' method='post' class='speaker-form'>
+
+				<div class="topnav">
+					<div class="hamburgher"></div>
+					<div class="hamburgher"></div>
+					<div class="hamburgher"></div>
+				</div>
+				<h2 class="title">Moviestars</h2>
+		</header>
+		<h1>Proiezioni:</h1>
+		<div class="proiezioni-conteiner">
+			<div th:each="proiezione:${proiezioni}">
+				<div class="proiezione-result">
+					<h3 th:text="${proiezione.getSala().getNome()}"></h3>
+					<h3 th:text="${proiezione.getFilm().getCodfilm()}"></h3>
+					<h3 th:text="${proiezione.getDataproiezione()}"></h3>
+					<hr>
+				</div>
+			</div>
+		</div>
+
+
+
+	</header>
+</body>
+
+</html>
