@@ -6,9 +6,9 @@ import java.sql.SQLException;
 
 public class ConnectionFactory {
 	private static Connection conn;
-	private static final String URL = "jdbc:postgresql://localhost:5432/moviestarscinemamanager";
+	private static final String URL = "jdbc:postgresql://localhost:5432/MovieStar";
 	private static final String USER = "postgres";
-	private static final String PASSWORD = "rootroot";
+	private static final String PASSWORD = "postgres";
 
 	public static Connection getConnection() {
 		

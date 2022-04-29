@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 
 import it.moviestarscinema.model.Film;
@@ -15,6 +14,8 @@ import it.moviestarscinema.model.Proiezioni;
 import it.moviestarscinema.model.ProiezioniDAO;
 import it.moviestarscinema.model.Sala;
 import it.moviestarscinema.model.SalaDAO;
+import it.moviestarscinema.util.BackupWriter;
+import it.moviestarscinema.util.DataBaseUtil;
 
 @Component
 public class RunnerPopolaDB implements CommandLineRunner {
@@ -36,9 +37,14 @@ public class RunnerPopolaDB implements CommandLineRunner {
 
 		switch (userCommand) {
 		case 0:
-			readFilmsFromData(); 
-			readSaleFromData(); 
-			readProiezioniFromData(); 
+			DataBaseUtil.deleteAllProiezioni(); 
+			DataBaseUtil.deleteAllRooms(); 
+			DataBaseUtil.deleteAllFilm(); 
+			
+			filmDAO.insertFilmAll(readFilmsFromData()); 
+			salaDAO.insertSalaAll(readSaleFromData()); 
+			proiezioniDAO.insertProiezioniAll(readProiezioniFromData()); 
+			break; 
 		case 1:
 			result = filmDAO.insertFilmAll(readFilmsFromData());
 			System.out.println("Film inserito: " + result);
@@ -72,6 +78,13 @@ public class RunnerPopolaDB implements CommandLineRunner {
 			proiezioniDAO.deleteProiezioni(keyboard.nextInt());
 			break;
 		case 7:
+			String filmtable = filmDAO.getAllFilm().toString(); 
+			String saletable = salaDAO.getAllSala().toString(); 
+			String proitable = proiezioniDAO.getAllProiezioni().toString(); 
+			
+			BackupWriter.backupFilm(filmtable);
+			BackupWriter.backupSale(saletable);
+			BackupWriter.backupProiezioni(proitable);
 			break;
 		default:
 			printMenu();
@@ -166,7 +179,7 @@ public class RunnerPopolaDB implements CommandLineRunner {
 		System.out.println("1 - Inserisci Film");
 		System.out.println("2 - Inserisci Proiezione");
 		System.out.println("3 - Inserisci Sala");
-		System.out.println("4 - Cerca sala per cittÃ ");
+		System.out.println("4 - Cerca sala per città ");
 		System.out.println("5 - Cerca proiezione per codice film");
 		System.out.println("6 - Elimina proiezione per codice proiezione");
 		System.out.println("7 - Backup DataBase");
