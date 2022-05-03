@@ -70,4 +70,14 @@ public class Sala {
 	public void setCitta(String citta) {
 		this.citta = citta;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	
 }

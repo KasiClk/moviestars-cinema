@@ -11,24 +11,30 @@ import it.moviestarscinema.repository.FilmRepository;
 @Service
 public class FilmService {
 	@Autowired
-	FilmRepository filmRepository; 
-	
-	public List<Film> getAllFilm (){ 
-		return filmRepository.findAll(); 
+	FilmRepository filmRepository;
+
+	public List<Film> getAllFilm() {
+		return filmRepository.findAll();
 	}
 	
-	public Film saveFilm (Film film) { 
-		return filmRepository.save(film); 
+	public Film getFilmById (Long id) { 
+		return filmRepository.findById(id).get();
 	}
-	
-	public Film updateFilm(Film film) { 
-		return filmRepository.save(film); 
+
+	public Film saveFilm(Film film) {
+		return filmRepository.save(film);
 	}
-	
-	public void deleteFilm (Long id) { 
+
+	public List<Film> saveAllFilm(List<Film> films) {
+		return filmRepository.saveAll(films);
+	}
+
+	public Film updateFilm(Film film) {
+		return filmRepository.save(film);
+	}
+
+	public void deleteFilm(Long id) {
 		filmRepository.deleteById(id);
 	}
-	
-	
 
 }
