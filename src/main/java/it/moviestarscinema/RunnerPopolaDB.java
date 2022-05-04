@@ -3,8 +3,9 @@ package it.moviestarscinema;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -15,87 +16,33 @@ import it.moviestarscinema.model.Sala;
 import it.moviestarscinema.service.FilmService;
 import it.moviestarscinema.service.ProiezioniService;
 import it.moviestarscinema.service.SalaService;
-import it.moviestarscinema.util.BackupWriter;
 
 @Component
 public class RunnerPopolaDB implements CommandLineRunner {
-	
+
+	Logger logger = LoggerFactory.getLogger(RunnerPopolaDB.class);
+
 	@Autowired
-	FilmService filmService; 
-	
+	FilmService filmService;
+
 	@Autowired
-	ProiezioniService proiezioniService; 
-	
+	ProiezioniService proiezioniService;
+
 	@Autowired
-	SalaService salaService; 
-	
+	SalaService salaService;
+
 	@Override
 	public void run(String... args) throws Exception {
 
+		logger.info("***** [MOVIESTARS] - START LOADING FILM *****");
+		filmService.saveAllFilm(readFilmsFromData());
 
-		Scanner keyboard = new Scanner(System.in);
+		logger.info("***** [MOVIESTARS] - START LOADING SALA *****");
+		salaService.saveAllSala(readSaleFromData());
 
-		printMenu();
+		logger.info("***** [MOVIESTARS] - START LOADING PROIEZIONI *****");
+		proiezioniService.saveAllProiezioni(readProiezioniFromData());
 
-		int userCommand = keyboard.nextInt();
-
-		switch (userCommand) {
-		case 0:
-//			DataBaseUtil.deleteAllProiezioni(); 
-//			DataBaseUtil.deleteAllRooms(); 
-//			DataBaseUtil.deleteAllFilm(); 
-			
-			filmService.saveAllFilm(readFilmsFromData()); 
-			salaService.saveAllSala(readSaleFromData()); 
-			proiezioniService.saveAllProiezioni(readProiezioniFromData()); 
-			break; 
-		case 1:
-			filmService.saveAllFilm(readFilmsFromData());
-			System.out.println("Film inserito");
-			break;
-		case 2:
-			proiezioniService.saveAllProiezioni(readProiezioniFromData());
-			System.out.println("Proiezione inserita" );
-			break;
-		case 3:
-			salaService.saveAllSala(readSaleFromData());
-			System.out.println("Sala inserito" );
-			break;
-		case 4:
-			System.out.println("Inserisci nome citta per la ricerca");
-			keyboard.nextLine();
-			List<Sala> sale = salaService.getSalaByNomeCitta(keyboard.nextLine());
-			for (Sala s_by_citta : sale)
-				System.out.println(s_by_citta.toString());
-			break;
-//		case 5:
-//			System.out.println("Inserisci codice film per ricercare proiezioni");
-//			keyboard.nextLine();
-//			List<Proiezioni> proiezioni = proiezioniService.getProiezioniByCodFilm(keyboard.nextInt());
-//			for (Proiezioni p_by_film : proiezioni)
-//				System.out.println(p_by_film.toString());
-//
-//			break;
-		case 6:
-			System.out.println("Inserisci codice proiezione da eliminare");
-			keyboard.nextLine();
-			proiezioniService.deleteProiezione(keyboard.nextLong());
-			break;
-		case 7:
-			String filmtable = filmService.getAllFilm().toString(); 
-			String saletable = salaService.getAllSala().toString(); 
-			String proitable = proiezioniService.getAllProiezioni().toString(); 
-			
-			BackupWriter.backupFilm(filmtable);
-			BackupWriter.backupSale(saletable);
-			BackupWriter.backupProiezioni(proitable);
-			break;
-		default:
-			printMenu();
-			break;
-		}
-
-		keyboard.close();
 	}
 
 	public static List<Film> readFilmsFromData() {
@@ -173,25 +120,11 @@ public class RunnerPopolaDB implements CommandLineRunner {
 		proiezioni.add(new Proiezioni(123367.89, new Date(1650236052L), getRandomSala(), getRandomFilm()));
 		proiezioni.add(new Proiezioni(1235756.89, new Date(1652346052L), getRandomSala(), getRandomFilm()));
 
-
 		return proiezioni;
 	}
 
-	public static void printMenu() {
-		System.out.println("------------------------------");
-		System.out.println("0 - Popola intero DB");
-		System.out.println("1 - Inserisci Film");
-		System.out.println("2 - Inserisci Proiezione");
-		System.out.println("3 - Inserisci Sala");
-		System.out.println("4 - Cerca sala per città ");
-		System.out.println("5 - Cerca proiezione per codice film");
-		System.out.println("6 - Elimina proiezione per codice proiezione");
-		System.out.println("7 - Backup DataBase");
-		System.out.println("------------------------------");
-	}
+	private Sala getRandomSala() {
 
-	private  Sala getRandomSala() {
-	
 		List<Long> sale_keys = new ArrayList<Long>();
 		for (Sala f : salaService.getAllSala())
 			sale_keys.add(f.getId());
@@ -200,8 +133,8 @@ public class RunnerPopolaDB implements CommandLineRunner {
 		return salaService.getSalaById(sale_keys.get(indexSala));
 	}
 
-	private  Film getRandomFilm() {
-		
+	private Film getRandomFilm() {
+
 		List<Long> film_keys = new ArrayList<Long>();
 		for (Film f : filmService.getAllFilm())
 			film_keys.add(f.getId());
@@ -215,4 +148,3 @@ public class RunnerPopolaDB implements CommandLineRunner {
 		return (int) Math.floor(Math.random() * (Math.floor(max - 1) - min + 1) + min);
 	}
 }
-
