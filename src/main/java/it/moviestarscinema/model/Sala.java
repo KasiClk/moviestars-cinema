@@ -1,6 +1,16 @@
 package it.moviestarscinema.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
 public class Sala {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private long id;
 
 	private int codsala;
 	private int numero_posti;
@@ -60,4 +70,14 @@ public class Sala {
 	public void setCitta(String citta) {
 		this.citta = citta;
 	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+	
+	
 }

@@ -3,95 +3,46 @@ package it.moviestarscinema;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import it.moviestarscinema.model.Film;
-import it.moviestarscinema.model.FilmDAO;
 import it.moviestarscinema.model.Proiezioni;
-import it.moviestarscinema.model.ProiezioniDAO;
 import it.moviestarscinema.model.Sala;
-import it.moviestarscinema.model.SalaDAO;
-import it.moviestarscinema.util.BackupWriter;
-import it.moviestarscinema.util.DataBaseUtil;
+import it.moviestarscinema.service.FilmService;
+import it.moviestarscinema.service.ProiezioniService;
+import it.moviestarscinema.service.SalaService;
 
-//@Component
+@Component
 public class RunnerPopolaDB implements CommandLineRunner {
+
+	Logger logger = LoggerFactory.getLogger(RunnerPopolaDB.class);
+
+	@Autowired
+	FilmService filmService;
+
+	@Autowired
+	ProiezioniService proiezioniService;
+
+	@Autowired
+	SalaService salaService;
 
 	@Override
 	public void run(String... args) throws Exception {
 
-		
-		FilmDAO filmDAO = new FilmDAO();
-		ProiezioniDAO proiezioniDAO = new ProiezioniDAO();
-		SalaDAO salaDAO = new SalaDAO();
+		logger.info("***** [MOVIESTARS] - START LOADING FILM *****");
+		filmService.saveAllFilm(readFilmsFromData());
 
-		Scanner keyboard = new Scanner(System.in);
-		boolean result;
+		logger.info("***** [MOVIESTARS] - START LOADING SALA *****");
+		salaService.saveAllSala(readSaleFromData());
 
-		printMenu();
+		logger.info("***** [MOVIESTARS] - START LOADING PROIEZIONI *****");
+		proiezioniService.saveAllProiezioni(readProiezioniFromData());
 
-		int userCommand = keyboard.nextInt();
-
-		switch (userCommand) {
-		case 0:
-			DataBaseUtil.deleteAllProiezioni(); 
-			DataBaseUtil.deleteAllRooms(); 
-			DataBaseUtil.deleteAllFilm(); 
-			
-			filmDAO.insertFilmAll(readFilmsFromData()); 
-			salaDAO.insertSalaAll(readSaleFromData()); 
-			proiezioniDAO.insertProiezioniAll(readProiezioniFromData()); 
-			break; 
-		case 1:
-			result = filmDAO.insertFilmAll(readFilmsFromData());
-			System.out.println("Film inserito: " + result);
-			break;
-		case 2:
-			result = proiezioniDAO.insertProiezioniAll(readProiezioniFromData());
-			System.out.println("Proiezione inserita: " + result);
-			break;
-		case 3:
-			result = salaDAO.insertSalaAll(readSaleFromData());
-			System.out.println("Sala inserito: " + result);
-			break;
-		case 4:
-			System.out.println("Inserisci nome citta per la ricerca");
-			keyboard.nextLine();
-			List<Sala> sale = salaDAO.getSalaByNomeCitta(keyboard.nextLine());
-			for (Sala s_by_citta : sale)
-				System.out.println(s_by_citta.toString());
-			break;
-		case 5:
-			System.out.println("Inserisci codice film per ricercare proiezioni");
-			keyboard.nextLine();
-			List<Proiezioni> proiezioni = proiezioniDAO.getProiezioniByCodFilm(keyboard.nextInt());
-			for (Proiezioni p_by_film : proiezioni)
-				System.out.println(p_by_film.toString());
-
-			break;
-		case 6:
-			System.out.println("Inserisci codice proiezione da eliminare");
-			keyboard.nextLine();
-			proiezioniDAO.deleteProiezioni(keyboard.nextInt());
-			break;
-		case 7:
-			String filmtable = filmDAO.getAllFilm().toString(); 
-			String saletable = salaDAO.getAllSala().toString(); 
-			String proitable = proiezioniDAO.getAllProiezioni().toString(); 
-			
-			BackupWriter.backupFilm(filmtable);
-			BackupWriter.backupSale(saletable);
-			BackupWriter.backupProiezioni(proitable);
-			break;
-		default:
-			printMenu();
-			break;
-		}
-
-		keyboard.close();
 	}
 
 	public static List<Film> readFilmsFromData() {
@@ -147,7 +98,7 @@ public class RunnerPopolaDB implements CommandLineRunner {
 	 * posso usare degli ID esisenti nel DB. (Ricorda sono presenti autonumeranti
 	 * nei codici)
 	 */
-	public static List<Proiezioni> readProiezioniFromData() {
+	public List<Proiezioni> readProiezioniFromData() {
 		List<Proiezioni> proiezioni = new ArrayList<Proiezioni>();
 
 		proiezioni.add(new Proiezioni(123456.89, new Date(165046052L), getRandomSala(), getRandomFilm()));
@@ -169,46 +120,31 @@ public class RunnerPopolaDB implements CommandLineRunner {
 		proiezioni.add(new Proiezioni(123367.89, new Date(1650236052L), getRandomSala(), getRandomFilm()));
 		proiezioni.add(new Proiezioni(1235756.89, new Date(1652346052L), getRandomSala(), getRandomFilm()));
 
-
 		return proiezioni;
 	}
 
-	public static void printMenu() {
-		System.out.println("------------------------------");
-		System.out.println("0 - Popola intero DB");
-		System.out.println("1 - Inserisci Film");
-		System.out.println("2 - Inserisci Proiezione");
-		System.out.println("3 - Inserisci Sala");
-		System.out.println("4 - Cerca sala per città ");
-		System.out.println("5 - Cerca proiezione per codice film");
-		System.out.println("6 - Elimina proiezione per codice proiezione");
-		System.out.println("7 - Backup DataBase");
-		System.out.println("------------------------------");
-	}
+	private Sala getRandomSala() {
 
-	private static Sala getRandomSala() {
-		SalaDAO salaDAO = new SalaDAO();
-		List<Integer> sale_keys = new ArrayList<Integer>();
-		for (Sala f : salaDAO.getAllSala())
-			sale_keys.add(f.getCodsala());
+		List<Long> sale_keys = new ArrayList<Long>();
+		for (Sala f : salaService.getAllSala())
+			sale_keys.add(f.getId());
 
 		int indexSala = extractRandomNumber(sale_keys.size());
-		return salaDAO.getSalaByID(sale_keys.get(indexSala));
+		return salaService.getSalaById(sale_keys.get(indexSala));
 	}
 
-	private static Film getRandomFilm() {
-		FilmDAO filmDAO = new FilmDAO();
-		List<Integer> film_keys = new ArrayList<Integer>();
-		for (Film f : filmDAO.getAllFilm())
-			film_keys.add(f.getCodfilm());
+	private Film getRandomFilm() {
+
+		List<Long> film_keys = new ArrayList<Long>();
+		for (Film f : filmService.getAllFilm())
+			film_keys.add(f.getId());
 
 		int indexFilm = extractRandomNumber(film_keys.size());
-		return filmDAO.getFilmByID(film_keys.get(indexFilm));
+		return filmService.getFilmById(film_keys.get(indexFilm));
 	}
 
-	private static int extractRandomNumber(int max) {
+	private int extractRandomNumber(int max) {
 		double min = 0.0;
 		return (int) Math.floor(Math.random() * (Math.floor(max - 1) - min + 1) + min);
 	}
 }
-

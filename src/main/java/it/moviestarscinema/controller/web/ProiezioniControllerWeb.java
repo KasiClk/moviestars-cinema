@@ -1,4 +1,4 @@
-package it.moviestarscinema.controller;
+package it.moviestarscinema.controller.web;
 
 import java.util.List;
 
@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import it.moviestarscinema.model.Proiezioni;
-import it.moviestarscinema.model.ProiezioniDAO;
+import it.moviestarscinema.service.ProiezioniService;
 
 @Controller
 @RequestMapping("/web")
 public class ProiezioniControllerWeb {
 	
 	@Autowired
-	ProiezioniDAO proiezioniDAO;
+	ProiezioniService proiezioniService;
 	
 	@GetMapping("/home")
 	public ModelAndView home() {
@@ -29,7 +29,7 @@ public class ProiezioniControllerWeb {
 	public ModelAndView proiezioni() {
 		ModelAndView model = new ModelAndView();
 		model.setViewName("proiezioni");
-		List<Proiezioni> proiezioni = proiezioniDAO.getAllProiezioni();
+		List<Proiezioni> proiezioni = proiezioniService.getAllProiezioni();
 		model.addObject("proiezioni", proiezioni);
 		return model;
 	}
