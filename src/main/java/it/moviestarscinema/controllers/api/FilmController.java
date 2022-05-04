@@ -35,10 +35,10 @@ public class FilmController {
 	}
 
 	@DeleteMapping("/eliminaFilm")
-	public HttpStatus deleteFilm(@RequestParam Long idFIlm) {
+	public HttpStatus deleteFilm(@RequestParam Long idFilm) {
 		logger.info("***** INVOCATO DELETE FILM ******");
 
-		filmService.deleteFilm(idFIlm);
+		filmService.deleteFilm(idFilm);
 
 		return HttpStatus.OK;
 	}
