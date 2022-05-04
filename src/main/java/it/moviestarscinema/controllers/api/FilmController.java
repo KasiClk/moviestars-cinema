@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,10 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import it.moviestarscinema.model.Film;
 import it.moviestarscinema.service.FilmService;
 
 @RestController
+@SecurityRequirement(name = "bearerAuth")
 @RequestMapping("/api")
 public class FilmController {
 
@@ -35,10 +38,10 @@ public class FilmController {
 	}
 
 	@DeleteMapping("/eliminaFilm")
-	public HttpStatus deleteFilm(@RequestParam Long idFIlm) {
+	public HttpStatus deleteFilm(@RequestParam Long idFilm) {
 		logger.info("***** INVOCATO DELETE FILM ******");
 
-		filmService.deleteFilm(idFIlm);
+		filmService.deleteFilm(idFilm);
 
 		return HttpStatus.OK;
 	}
@@ -51,6 +54,7 @@ public class FilmController {
 	}
 
 	@PostMapping("/inserisciFilm")
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	public Film inserisciFilm(@RequestBody Film film) {
 		logger.info("***** INVOCATO INSERISCI FILM ******");
 
