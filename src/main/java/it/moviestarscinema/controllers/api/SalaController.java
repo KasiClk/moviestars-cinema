@@ -17,48 +17,48 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import it.moviestarscinema.model.Film;
-import it.moviestarscinema.service.FilmService;
+import it.moviestarscinema.model.Sala;
+import it.moviestarscinema.service.SalaService;
 
 @RestController
 @SecurityRequirement(name = "bearerAuth") // roba di swagger
 @RequestMapping("/api")
-public class FilmController {
+public class SalaController {
 
-	Logger logger = LoggerFactory.getLogger(FilmController.class);
+	Logger logger = LoggerFactory.getLogger(SalaController.class);
 
 	@Autowired
-	FilmService filmService;
+	SalaService salaService;
 
-	@GetMapping("/allfilm")
-	public List<Film> getAllFilms() {
+	@GetMapping("/sale")
+	public List<Sala> getAllSala() {
 		logger.info("***** INVOCATO GETALLFILMS ******");
 
-		return filmService.getAllFilm();
+		return salaService.getAllSala();
 	}
 
-	@DeleteMapping("/eliminaFilm")
-	public HttpStatus deleteFilm(@RequestParam Long idFilm) {
+	@DeleteMapping("/eliminaSala")
+	public HttpStatus deleteSala(@RequestParam Long idSala) {
 		logger.info("***** INVOCATO DELETE FILM ******");
 
-		filmService.deleteFilm(idFilm);
+		salaService.deleteFilm(idSala);
 
 		return HttpStatus.OK;
 	}
 
-	@PutMapping("/aggiornaFilm")
-	public Film updateFilm(@RequestBody Film film) {
-		logger.info("***** INVOCATO AGGIORNA FILM ******");
+	@PutMapping("/aggiornasala")
+	public Sala updateFilm(@RequestBody Sala sala) {
+		logger.info("***** INVOCATO AGGIORNA SALA ******");
 
-		return filmService.updateFilm(film);
+		return salaService.updateSala(sala);
 	}
 
-	@PostMapping("/inserisciFilm")
+	@PostMapping("/inserisciSala")
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
-	public Film inserisciFilm(@RequestBody Film film) {
-		logger.info("***** INVOCATO INSERISCI FILM ******");
+	public Sala inserisciFilm(@RequestBody Sala sala) {
+		logger.info("***** INVOCATO INSERISCI SALA ******");
 
-		return filmService.saveFilm(film);
+		return salaService.saveSala(sala);
 	}
 
 }
