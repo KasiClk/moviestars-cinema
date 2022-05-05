@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -12,26 +13,29 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+
 import it.moviestarscinema.security.service.UserDetailsServiceImpl;
 import it.moviestarscinema.security.util.AuthTokenFilter;
 
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+
 @Order
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
-	
+
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
 
 	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
+  public BCryptPasswordEncoder passwordEncoder() {
 		return new BCryptPasswordEncoder(4);
 	}
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(this.passwordEncoder());
+
 	}
 
 	@Bean
@@ -39,26 +43,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new AuthTokenFilter();
 	}
 
-	@Bean
-	public AuthenticationManager authenticationManager() throws Exception {
-		return super.authenticationManager();
+	@Override
+	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
+		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(this.passwordEncoder());
 	}
 
-//	@Override
-//	protected void configure(HttpSecurity http) throws Exception {
-//	
-//	   http.authorizeRequests().antMatchers(
-//		                "/",
-//		                "/swagger-ui.html"
-//        ).permitAll();
-//	   http.authorizeRequests().antMatchers("/*").permitAll().anyRequest().authenticated().and().formLogin();
-//     
-//		 
-////		http.authorizeRequests().antMatchers(
-////				"/").permitAll().anyRequest().authenticated().and().formLogin();      
-//		//http.authorizeRequests(authz -> authz.antMatchers("/*").permitAll().anyRequest().authenticated()).formLogin();
-//
-//	}
 	@Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests().antMatchers("/*","swagger-ui.html").permitAll();
@@ -68,6 +57,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
              
 	}
 	
-	
 }
-	
