@@ -41,8 +41,7 @@ public class RunnerPopolaDB implements CommandLineRunner {
 		salaService.saveAllSala(readSaleFromData());
 
 		logger.info("***** [MOVIESTARS] - START LOADING PROIEZIONI *****");
-		proiezioniService.saveAllProiezioni(readProiezioniFromData());
-
+	    proiezioniService.saveAllProiezioni(readProiezioniFromData());
 	}
 
 	public static List<Film> readFilmsFromData() {
