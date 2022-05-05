@@ -21,7 +21,7 @@ import it.moviestarscinema.model.Film;
 import it.moviestarscinema.service.FilmService;
 
 @RestController
-@SecurityRequirement(name = "bearerAuth")
+@SecurityRequirement(name = "bearerAuth") //roba di swagger
 @RequestMapping("/api")
 public class FilmController {
 

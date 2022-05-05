@@ -25,12 +25,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	UserDetailsServiceImpl userDetailsService;
-	
-	@Autowired 
-	BCryptPasswordEncoder bCryptPasswordEncoder; 
-	
-	@Autowired 
-	AuthTokenFilter authTokenFilter; 	
+
+	@Autowired
+	BCryptPasswordEncoder bCryptPasswordEncoder;
+
+	@Autowired
+	AuthTokenFilter authTokenFilter;
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
