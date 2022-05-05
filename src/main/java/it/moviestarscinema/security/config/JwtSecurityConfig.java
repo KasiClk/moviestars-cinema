@@ -30,31 +30,12 @@ public class JwtSecurityConfig extends WebSecurityConfigurerAdapter {
 	BCryptPasswordEncoder bCryptPasswordEncoder; 
 	
 	@Autowired 
-	AuthTokenFilter authTokenFilter; 
-	
-	
-	
-//	@Bean
-//	public AuthenticationManager authenticationManager() throws Exception {
-//		return super.authenticationManager();
-//	}
-	
-//	@Bean
-//	public AuthTokenFilter authenticationJwtTokenFilter() {
-//		return new AuthTokenFilter();
-//	}
-
-//	@Bean
-//	public BCryptPasswordEncoder passwordEncoder() {
-//		return new BCryptPasswordEncoder(4);
-//	}
+	AuthTokenFilter authTokenFilter; 	
 
 	@Override
 	public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
 		authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder);
 	}
-
-
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
